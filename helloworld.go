@@ -1,24 +1,28 @@
-// This program prints duplicate lines from the standard input
-
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
-	counts := make(map[string]int)
-	input := bufio.NewScanner(os.Stdin)
+	count := make(map[string]int)
+	file := os.Args[1]
 
-	for input.Scan() {
-		counts[input.Text()]++
+	content, err := os.ReadFile(file)
+	if err != nil {
+		fmt.Println(err)
 	}
 
-	for line, n := range counts {
-		if n > 1 {
-			fmt.Printf("Amount: %d\tLine: %s\n", n, line)
+	for _, name := range strings.Split(string(content), "\n") {
+		count[name]++
+	}
+
+	for line, amount := range count {
+		if amount > 1 {
+			fmt.Printf("%d\t%s\n", amount, line)
 		}
 	}
+
 }
